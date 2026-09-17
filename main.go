@@ -11,6 +11,8 @@ import (
 const (
 	MOUSE_LOOK_SENSITIVITY = 0.002
 	MOVE_SPEED             = 0.05
+
+	PLAYER_HEIGHT = 0.675
 )
 
 var (
@@ -27,11 +29,12 @@ func main() {
 	textures := make([]rl.Texture2D, 10)
 	textures[0] = rl.LoadTexture("textures/clay.png")
 	textures[1] = rl.LoadTexture("textures/metal.png")
+	textures[2] = rl.LoadTexture("textures/metal-tiles.png")
 
 	// setup
 	camera := createCamera()
 	s := state{
-		pos:      rl.NewVector3(0, 1, 0),
+		pos:      rl.NewVector3(0, PLAYER_HEIGHT, 0),
 		textures: textures,
 	}
 
@@ -104,12 +107,18 @@ func draw(camera rl.Camera3D, state state) {
 			pkg.DrawRectFloor(state.textures[0], pos, 1, 1, rl.White)
 		}
 	}
+	for i := range 10 {
+		for j := range 6 {
+			pos := rl.NewVector3(float32(i), 1, float32(j))
+			pkg.DrawRectCeiling(state.textures[2], pos, 1, 1, rl.White)
+		}
+	}
 	for j := range 5 {
 		pos := rl.NewVector3(float32(2), 0, float32(j))
 		pkg.DrawRectWall(state.textures[1], pos, 1, 1, 1, rl.White)
 	}
 	for j := range 5 {
-		pos := rl.NewVector3(float32(j), 0, float32(7))
+		pos := rl.NewVector3(float32(j), 0, float32(6))
 		pkg.DrawRectWall(state.textures[1], pos, 1, 1, 1, rl.White)
 	}
 	rl.DrawGrid(20, 1.0)
